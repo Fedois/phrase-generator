@@ -13,10 +13,11 @@
 </head>
 <body>
     <main class="text-center">
-        <h1 style="font-size: 5em; display: inline;">Pearls for my love <span class="heart text-danger" style="user-select: none; ">&hearts;</span></h1>
+        <h1 style="font-size: 5em; display: inline;">Pearls for my love <span title="Change theme" class="heart d-inline-block">&hearts;</span></h1>
 
         <div data-bs-toggle="modal" data-bs-target="#exampleModal" class="box" style="margin: 2rem 0; padding: 2rem; max-width: 700px;">
             <p aria-colspan="border border-dark" style="padding: 2rem; font-size: 2em;" class="pearl"><q> </q></p>
+            <p class="pearls-end fs-2 border p-2">Congratulations! <br> you have collected all the pearls <br> &hearts; &hearts; &hearts; &hearts; &hearts;</p>
         </div>
 
         <button class="bg-danger border border-danger" style="font-size: 1.5em;">Generate Pearl</button>
@@ -24,11 +25,11 @@
     </main>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-1" id="exampleModalLabel">Chronology <span class="count d-inline-block ms-3"></span></h1>
-              <a type="button" class="fs-4 text-decoration-none" data-bs-dismiss="modal" aria-label="Close">&#x2717;</a>
+              <p type="button" data-bs-dismiss="modal" aria-label="Close">&#x2718;</p>
             </div>
 
             <div class="modal-body">
@@ -49,14 +50,14 @@
         const info = document.querySelector('.info')
         const pearl = document.querySelector('.pearl > q');
         const list = document.querySelector('ul')
-        let clicked = ""
+        let color = "white"
         let chronology = []
         let pearls = [
                     "Il tuo sorriso illumina la mia giornata.",
                     "Sei il mio sogno diventato realtà.",
                     "Ogni istante con te è prezioso.",
-                    "La tua presenza rende tutto migliore.",
-                    "Insieme, ogni momento è magico.",
+                    // "La tua presenza rende tutto migliore.",
+                    // "Insieme, ogni momento è magico.",
                     // "Nel tuo sguardo trovo il mio rifugio.",
                     // "Sei la melodia che il mio cuore canta.",
                     // "Amarti è la cosa più dolce che conosca.",
@@ -160,26 +161,48 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             button.addEventListener('click', function() {
-                localStorage.clear()
-                generatePearls();
+                pearl.textContent = pearls[Math.floor(Math.random() * pearls.length)];
+
+                if (pearls.length > 0){
+                    index = pearls.indexOf(pearl.textContent)
+                    pearls.splice(index, 1)
+                    
+                    chronology.push(pearl.textContent)
+                }
+                
+                const saveChronology = JSON.stringify(chronology)
+                const savePearls = JSON.stringify(pearls)
+                const savePearl = pearl.textContent
+                const saveToday = new Date().toLocaleDateString();
+
+                localStorage.setItem("dark-mode", color)
+                localStorage.setItem("chronology", saveChronology)
+                localStorage.setItem("pearls", savePearls)
+                localStorage.setItem("pearlGenerate", savePearl)
+                localStorage.setItem("dateGenerate", saveToday);
+
                 button.style.display = 'none';
                 info.style.display = 'block'
             });
 
             const today = new Date().toLocaleDateString();
-            if (localStorage.getItem("dateGenerate") == today) {
+            if (!localStorage.getItem("dateGenerate") == today) {
                 button.style.display = 'none';
-                info.style.display = 'block'
+                localStorage.getItem('pearls') == '[]' ? info.style.display = 'none' : info.style.display = 'block'
                 pearl.textContent = localStorage.getItem("pearlGenerate")
-                clicked = localStorage.getItem('dark-mode')
+                color = localStorage.getItem('dark-mode')
             } else {
                 if (localStorage.length > 0){
+                    color = localStorage.getItem('dark-mode')
                     pearls = localStorage.getItem("pearls")
                     pearls = JSON.parse(pearls)
                 }
                 button.style.display = 'block';
             }
+            
 
+
+            // STAMPA CRONOLOGIA
             if(localStorage.length > 0){
                 chronology = localStorage.getItem("chronology")
                 chronology = JSON.parse(chronology)
@@ -189,61 +212,56 @@
                     list.append(createList)
                 })
                 document.querySelector('.count').innerHTML = '('+chronology.length+'/365)'
+                if(chronology.length == 3){
+                    button.style.display = 'none'
+                    document.querySelector('.pearls-end').style.display = 'block'
+                    document.querySelector('.pearl').style.display = 'none'
+                }
             }
 
-            clicked = localStorage.length > 0 ? localStorage.getItem('dark-mode') : "white"
+            
+            // CAMBIA TEMA
             document.querySelector('.heart').addEventListener('click', function() {
-                clicked = setDarkMode(clicked)
+                color = setDarkMode(color)
             })
             if (localStorage.getItem('dark-mode') === "black"){
                 changeTheme('#181818', 'white')
-            } else{
+            } else if(localStorage.getItem('dark-mode') === "white"){
                 changeTheme('white', 'black')
+            } else if (localStorage.getItem('dark-mode') === "red"){
+                changeTheme('red', 'white')
+            } else if (localStorage.getItem('dark-mode') === "blue"){
+                changeTheme('#0066ff', 'white')
             }
         });
 
+
         // FUNZIONI
+
+        function setDarkMode(color){
+            if (color === "white"){
+                color = "black"
+                changeTheme('#181818', 'white')
+            } else if (color === "black"){
+                color = "red"
+                changeTheme('red', 'white')
+            } else if (color === "red") {
+                color = "blue"
+                changeTheme('#0066ff', 'white')
+            } else if (color === "blue") {
+                color = "white"
+                changeTheme('white', 'black')
+            }
+            localStorage.setItem('dark-mode', color)
+            return color
+        } 
+
         function changeTheme(color1, color2){
             document.querySelector('main').style.backgroundColor = color1
             document.querySelector('main').style.color = color2
             document.querySelector('.modal').style.color = color2
             document.querySelector('.modal-content').style.backgroundColor = color1
-            document.querySelector('.modal a').style.cssText = `color: ${color2} !important`
-            console.log(document.querySelector('a'))
-            document.querySelector('.pearl').style.border = `1px solid ${color2}`
-        }
-
-        function setDarkMode(clicked){
-            if (clicked === "white"){
-                clicked = "black"
-                changeTheme('#181818', 'white')
-            } else{
-                clicked = "white"
-                changeTheme('white', 'black')
-            }
-            localStorage.setItem('dark-mode', clicked)
-            return clicked
-        } 
-
-        function generatePearls() {
-            pearl.textContent = pearls[Math.floor(Math.random() * pearls.length)];
-
-            if (pearls.length > 0){
-                index = pearls.indexOf(pearl.textContent)
-                pearls.splice(index, 1)
-                
-                chronology.push(pearl.textContent)
-            }
-            
-            const saveChronology = JSON.stringify(chronology)
-            const savePearls = JSON.stringify(pearls)
-            const savePearl = pearl.textContent
-            const saveToday = new Date().toLocaleDateString();
-
-            localStorage.setItem("chronology", saveChronology)
-            localStorage.setItem("pearls", savePearls)
-            localStorage.setItem("pearlGenerate", savePearl)
-            localStorage.setItem("dateGenerate", saveToday);
+            document.querySelector('.pearl').style.border = `1px solid ${color2} ` 
         }
     </script>
 </body>
@@ -277,14 +295,32 @@
         color: red;
         transform: scale(1.1);
     }
+    .heart{
+        color: #980000;
+    }
+    .pearl{
+        border: 1px solid black;
+    }
     .heart:hover{
         cursor: pointer;
-        color: rgb(212, 0, 0) !important;
+        transform: scale(1.2);
     }
     .box:hover{
         cursor: pointer;
-        transform: scale(0.9);
+        transform: scale(0.98);
     }
+    ::-webkit-scrollbar{
+        width: 10px;
+    }
+    *::-webkit-scrollbar-thumb {
+        background-color: #980000;
+        border-radius: 10px;
+        border: 1px solid #ffffff;
+    }
+    .pearls-end{
+        display: none;
+    }
+
    
 </style>
 </html>
