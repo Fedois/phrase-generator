@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <main class="text-center">
+    <main class="text-center position-relative">
         <h1 style="font-size: 5em; display: inline;">Pearls for my love <span title="Change theme" class="heart d-inline-block">&hearts;</span></h1>
 
         <div data-bs-toggle="modal" data-bs-target="#exampleModal" class="box" style="margin: 2rem 0; padding: 2rem; max-width: 700px;">
@@ -21,7 +21,21 @@
         </div>
 
         <button class="bg-danger border border-danger" style="font-size: 1.5em;">Generate Pearl</button>
-        <p style="font-size: 2em; display: none;" class="info">Domani potrai generare una nuova frase</p>
+        <p style="font-size: 2em; display: none;" class="info">tomorrow you will be able to generate a new peark</p>
+
+        <div class="birthday position-absolute top-0 start-0 d-flex justify-content-center align-items-center">
+            <div class="fs-2 border bg-white text-dark">
+                Happy Birthday to You, 
+                Happy Birthday to You, 
+                Happy Birthday Dear Elisa, 
+                Happy Birthday to You.
+            
+                From good friends and true,
+                From old friends and new,
+                May good luck go with you,
+                And happiness too.
+            </div>
+        </div>
     </main>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -33,7 +47,7 @@
             </div>
 
             <div class="modal-body">
-              <ul class="text-start fs-3">
+              <ul class="m-0 p-0 fs-3">
               </ul>
             </div>
           </div>
@@ -419,6 +433,8 @@
             "Sei la poesia che danza nel vento della nostra storia d'amore.",
             "Nel riflesso dei tuoi occhi vedo il destino che voglio percorrere."
         ]
+        
+        localStorage.getItem('dateGenerate') == '26/10/2023' ? document.querySelector('.birthday > div').style.display = 'block' : document.querySelector('.birthday > div').style.display = 'none'
 
         document.addEventListener("DOMContentLoaded", function () {
             const today = new Date().toLocaleDateString();
@@ -426,7 +442,7 @@
                 button.style.display = 'none';
                 localStorage.getItem('pearls') == '[]' ? info.style.display = 'none' : info.style.display = 'block'
                 pearl.textContent = localStorage.getItem("pearlGenerate")
-                color = localStorage.getItem('dark-mode')
+                color = localStorage.getItem('dark-mode') ? localStorage.getItem('dark-mode') : 'white'
             } else {
                 if (localStorage.getItem('pearls')){
                     pearls = localStorage.getItem("pearls")
@@ -440,9 +456,10 @@
             if(localStorage.getItem('chronology')){
                 chronology = localStorage.getItem("chronology")
                 chronology = JSON.parse(chronology)
-                chronology.forEach(pearl => {
+                chronology.forEach(element => {
                     createList = document.createElement('li')
-                    createList.innerHTML = pearl
+                    createList.innerHTML =  `<div class="d-flex"><span class="pe-3">&hearts;</span>${element.pearl}</div> <span class="p-0 align-self-end ms-5">${element.date}</span>`
+                    createList.className = 'd-flex justify-content-between border-bottom'
                     list.append(createList)
                 })
                 document.querySelector('.count').innerHTML = '('+chronology.length+'/365)'
@@ -461,7 +478,9 @@
                     index = pearls.indexOf(pearl.textContent)
                     pearls.splice(index, 1)
                     
-                    chronology.push(pearl.textContent)
+                    chronology.push({'pearl': pearl.textContent,
+                                    'date' : new Date().toLocaleDateString()})
+                    console.log(chronology)
                 }
                 
                 const saveChronology = JSON.stringify(chronology)
