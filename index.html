@@ -463,7 +463,7 @@
                 chronology = JSON.parse(chronology)
                 chronology.forEach((element, i) => {
                     createList = document.createElement('li')
-                    createList.innerHTML =  `<div id="${i}" class="d-flex"><span class="pe-3 small-heart" title="">&hearts;</span></div> <span class="p-0 align-self-end ms-5">${element.date}</span>`
+                    createList.innerHTML =  `<div id="${i}" class="d-flex"><span class="pe-3 small-heart" title="">&hearts;</span>${element.pearl}</div> <span class="p-0 align-self-end ms-5">${element.date}</span>`
                     createList.className = 'd-flex justify-content-between border-bottom'
                     list.append(createList)
                 })
