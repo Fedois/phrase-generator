@@ -41,13 +41,17 @@
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
           <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-1" id="exampleModalLabel">Chronology <span class="count d-inline-block ms-3"></span></h1>
+            <div class="modal-header position-relative">
+              <h1 class="modal-title fs-1" id="exampleModalLabel">Chronology <span class="count d-inline-block ms-3"></span> <br></h1>
               <p type="button" data-bs-dismiss="modal" aria-label="Close">&#x2718;</p>
+
+              <div class="position-absolute bottom-0 end-0 me-3">
+                <input id="filter-fav" type="checkbox"></input> <label for="filter-fav" class="fs-4">Filter Favourites</label>
+              </div>
             </div>
 
             <div class="modal-body">
-              <ul class="m-0 p-0 fs-3">
+              <ul class="m-0 p-0 fs-3 list-pearls">
               </ul>
             </div>
           </div>
@@ -65,6 +69,7 @@
         const pearl = document.querySelector('.pearl > q');
         const list = document.querySelector('ul')
         let color = "white"
+        let favourites = localStorage.getItem('favourites') ? JSON.parse(localStorage.getItem('favourites')) : []
         let chronology = []
         let pearls = [
             "Nel tuo sguardo trovo il mio rifugio sicuro.",
@@ -456,9 +461,9 @@
             if(localStorage.getItem('chronology')){
                 chronology = localStorage.getItem("chronology")
                 chronology = JSON.parse(chronology)
-                chronology.forEach(element => {
+                chronology.forEach((element, i) => {
                     createList = document.createElement('li')
-                    createList.innerHTML =  `<div class="d-flex"><span class="pe-3">&hearts;</span>${element.pearl}</div> <span class="p-0 align-self-end ms-5">${element.date}</span>`
+                    createList.innerHTML =  `<div id="${i}" class="d-flex"><span class="pe-3 small-heart" title="">&hearts;</span></div> <span class="p-0 align-self-end ms-5">${element.date}</span>`
                     createList.className = 'd-flex justify-content-between border-bottom'
                     list.append(createList)
                 })
@@ -480,7 +485,6 @@
                     
                     chronology.push({'pearl': pearl.textContent,
                                     'date' : new Date().toLocaleDateString()})
-                    console.log(chronology)
                 }
                 
                 const saveChronology = JSON.stringify(chronology)
@@ -496,6 +500,46 @@
                 button.style.display = 'none';
                 info.style.display = 'block'
             });
+
+            // AGGIUNGI/RIMUOVI PREFERITI
+            document.querySelectorAll('.small-heart').forEach(heart => {
+                heart.addEventListener('click', function(){
+                    let li = this.parentElement.parentElement
+                    if(li.classList.contains('fav')){
+                        li.classList.remove('fav')
+                        index = favourites.indexOf(heart.parentElement.id)
+                        favourites.splice(index, 1)
+                    }else{
+                        li.classList.add('fav')
+                        favourites.push(this.parentElement.id)
+                    }
+                    localStorage.setItem('favourites', JSON.stringify(favourites))
+                })
+            });
+
+            if(localStorage.getItem('favourites')){
+                document.querySelectorAll('.small-heart').forEach(heart => {
+                    let favourites = JSON.parse(localStorage.getItem('favourites'))
+                    favourites.forEach(fav => {
+                        if(fav == heart.parentElement.id){
+                            heart.parentElement.parentElement.classList.add('fav')
+                        }
+                    });
+                })
+            }
+
+            //FILTRA PER PREFERITI
+            document.getElementById('filter-fav').addEventListener('change', function(){
+                if(this.checked){
+                    document.querySelectorAll('.list-pearls li').forEach(li => {
+                        li.classList.contains('fav') ? null : li.classList.add('d-none')
+                    })
+                } else {
+                    document.querySelectorAll('.list-pearls li').forEach(li => {
+                        li.classList.remove('d-none')
+                    })
+                }
+            })
 
             
             // CAMBIA TEMA
@@ -522,7 +566,6 @@
 
 
         // FUNZIONI
-
         function setDarkMode(color){
             if (color === "white"){
                 color = "black"
@@ -568,6 +611,13 @@
         box-sizing: border-box;
         transition: 0.25s all;
         font-family: 'Qwitcher Grypen', cursive;
+    }
+    .fav{
+        background-color: rgb(255, 150, 150);
+        color: black;
+    }
+    .small-heart{
+        cursor: pointer;
     }
     main{
         width: 100%;
