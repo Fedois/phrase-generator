@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pearlsgenerator</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <main class="text-center position-relative">
+        <div class="position-absolute bottom-0 end-0 my-2 me-4 fs-3">
+            <a href="https://www.linkedin.com/in/federicofois/"><i class="fa-brands fa-linkedin me-2"></i></a>
+            <a href="https://www.instagram.com/fedois_/"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        <h1 style="font-size: 5em; display: inline;">Pearls Generator <span title="Change theme" class="heart d-inline-block">&hearts;</span></h1>
+
+        <div data-bs-toggle="modal" data-bs-target="#exampleModal" class="box" style="margin: 2rem 0; padding: 2rem; max-width: 700px;">
+            <p aria-colspan="border border-dark" style="padding: 2rem; font-size: 2em;" class="pearl"><q> </q></p>
+            <p class="pearls-end fs-2 border p-2">Congratulations! <br> you have collected all the pearls <br> &hearts; &hearts; &hearts; &hearts; &hearts;</p>
+        </div>
+
+        <button class="bg-danger border border-danger" style="font-size: 1.5em;">Generate Pearl</button>
+        <p style="font-size: 2em; display: none;" class="info">tomorrow you will be able to generate a new peark</p>
+
+        <div class="birthday position-absolute top-0 start-0 d-flex justify-content-center align-items-center">
+            <div class="fs-2 border bg-white text-dark">
+                Happy Birthday to You, 
+                Happy Birthday to You, 
+                Happy Birthday Dear Elisa, 
+                Happy Birthday to You.
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header position-relative">
+              <h1 class="modal-title fs-1" id="exampleModalLabel">Chronology <span class="count d-inline-block ms-3"></span> <br></h1>
+              <p type="button" data-bs-dismiss="modal" aria-label="Close">&#x2718;</p>
+
+              <div class="position-absolute bottom-0 end-0 me-3">
+                <input id="filter-fav" type="checkbox"></input> <label for="filter-fav" class="fs-4">Filter Favourites</label>
+              </div>
+            </div>
+
+            <div class="modal-body">
+              <ul class="m-0 p-0 fs-3 list-pearls">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="phrase.js"></script>
+    <script>
+        // localStorage.clear()
+        console.log(localStorage)
+
+        const button = document.querySelector('button');
+        const info = document.querySelector('.info')
+        const pearl = document.querySelector('.pearl > q');
+        const list = document.querySelector('ul')
+        let color = "white"
+        let favourites = localStorage.getItem('favourites') ? JSON.parse(localStorage.getItem('favourites')) : []
+        let chronology = []
+        
+        localStorage.getItem('dateGenerate') == '26/10/2023' ? document.querySelector('.birthday > div').style.display = 'block' : document.querySelector('.birthday > div').style.display = 'none'
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toLocaleDateString();
+            if (localStorage.getItem("dateGenerate") == today) {
+                button.style.display = 'none';
+                localStorage.getItem('pearls') == '[]' ? info.style.display = 'none' : info.style.display = 'block'
+                pearl.textContent = localStorage.getItem("pearlGenerate")
+                color = localStorage.getItem('dark-mode') ? localStorage.getItem('dark-mode') : 'white'
+            } else {
+                if (localStorage.getItem('pearls')){
+                    pearls = localStorage.getItem("pearls")
+                    pearls = JSON.parse(pearls)
+                }
+                button.style.display = 'block';
+            }
+            
+
+            // STAMPA CRONOLOGIA
+            if(localStorage.getItem('chronology')){
+                chronology = localStorage.getItem("chronology")
+                chronology = JSON.parse(chronology)
+                chronology.forEach((element, i) => {
+                    createList = document.createElement('li')
+                    createList.innerHTML =  `<div id="${i}" class="d-flex"><span class="pe-3 small-heart" title="">&hearts;</span>${element.pearl}</div> <span class="p-0 align-self-end ms-5">${element.date}</span>`
+                    createList.className = 'd-flex justify-content-between border-bottom'
+                    list.append(createList)
+                })
+                document.querySelector('.count').innerHTML = '('+chronology.length+'/365)'
+                if(chronology.length == 365){
+                    button.style.display = 'none'
+                    document.querySelector('.pearls-end').style.display = 'block'
+                    document.querySelector('.pearl').style.display = 'none'
+                }
+            }
+
+            // GENERA FRASE
+            button.addEventListener('click', function() {
+                pearl.textContent = pearls[Math.floor(Math.random() * pearls.length)];
+
+                if (pearls.length > 0){
+                    index = pearls.indexOf(pearl.textContent)
+                    pearls.splice(index, 1)
+                    
+                    chronology.push({'pearl': pearl.textContent,
+                                    'date' : new Date().toLocaleDateString()})
+                }
+                
+                const saveChronology = JSON.stringify(chronology)
+                const savePearls = JSON.stringify(pearls)
+                const savePearl = pearl.textContent
+                const saveToday = new Date().toLocaleDateString();
+                
+                localStorage.setItem("chronology", saveChronology)
+                localStorage.setItem("pearls", savePearls)
+                localStorage.setItem("pearlGenerate", savePearl)
+                localStorage.setItem("dateGenerate", saveToday);
+
+                button.style.display = 'none';
+                info.style.display = 'block'
+            });
+
+            // AGGIUNGI/RIMUOVI PREFERITI
+            document.querySelectorAll('.small-heart').forEach(heart => {
+                heart.addEventListener('click', function(){
+                    let li = this.parentElement.parentElement
+                    if(li.classList.contains('fav')){
+                        li.classList.remove('fav')
+                        index = favourites.indexOf(heart.parentElement.id)
+                        favourites.splice(index, 1)
+                    }else{
+                        li.classList.add('fav')
+                        favourites.push(this.parentElement.id)
+                    }
+                    localStorage.setItem('favourites', JSON.stringify(favourites))
+                })
+            });
+
+            if(localStorage.getItem('favourites')){
+                document.querySelectorAll('.small-heart').forEach(heart => {
+                    let favourites = JSON.parse(localStorage.getItem('favourites'))
+                    favourites.forEach(fav => {
+                        if(fav == heart.parentElement.id){
+                            heart.parentElement.parentElement.classList.add('fav')
+                        }
+                    });
+                })
+            }
+
+            //FILTRA PER PREFERITI
+            document.getElementById('filter-fav').addEventListener('change', function(){
+                if(this.checked){
+                    document.querySelectorAll('.list-pearls li').forEach(li => {
+                        li.classList.contains('fav') ? null : li.classList.add('d-none')
+                    })
+                } else {
+                    document.querySelectorAll('.list-pearls li').forEach(li => {
+                        li.classList.remove('d-none')
+                    })
+                }
+            })
+
+            
+            // CAMBIA TEMA
+            document.querySelector('.heart').addEventListener('click', function() {
+                color = setDarkMode(color)
+            })
+
+            if (localStorage.getItem('dark-mode') === "black"){
+                changeTheme('#181818', 'white')
+            } else if(localStorage.getItem('dark-mode') === "white"){
+                changeTheme('white', 'black')
+            } else if (localStorage.getItem('dark-mode') === "red"){
+                changeTheme('red', 'white')
+            } else if (localStorage.getItem('dark-mode') === "blue"){
+                changeTheme('#0066ff', 'white')
+            } else if (localStorage.getItem('dark-mode') === "violet"){
+                changeTheme('#b600b6', 'white')
+            } else if (localStorage.getItem('dark-mode') === "pink"){
+                changeTheme('pink', 'black')
+            }  else if (localStorage.getItem('dark-mode') === "yellow"){
+                changeTheme('#fefe9f', 'black')
+            }
+        });
+
+
+        // FUNZIONI
+        function setDarkMode(color){
+            if (color === "white"){
+                color = "black"
+                changeTheme('#181818', 'white')
+            } else if (color === "black"){
+                color = "red"
+                changeTheme('red', 'white')
+            } else if (color === "red") {
+                color = "blue"
+                changeTheme('#0066ff', 'white')
+            } else if (color === "blue") {
+                color = "violet"
+                changeTheme('#b600b6', 'black')
+            } else if (color === "violet") {
+                color = "pink"
+                changeTheme('pink', 'black')
+            } else if (color === "pink") {
+                color = "yellow"
+                changeTheme('#fefe9f', 'black')
+            } else if (color === "yellow") {
+                color = "white"
+                changeTheme('white', 'black')
+            }
+            localStorage.setItem('dark-mode', color)
+            return color
+        } 
+
+        function changeTheme(color1, color2){
+            document.querySelector('main').style.backgroundColor = color1
+            document.querySelector('main').style.color = color2
+            document.querySelector('.modal').style.color = color2
+            document.querySelector('.modal-content').style.backgroundColor = color1
+            document.querySelector('.pearl').style.border = `1px solid ${color2} ` 
+        }
+    </script>
+</body>
+
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        transition: 0.25s all;
+        font-family: 'Qwitcher Grypen', cursive;
+    }
+    .fav{
+        background-color: rgb(255, 150, 150);
+        color: black;
+    }
+    .small-heart{
+        cursor: pointer;
+    }
+    main{
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    button{
+        border: 0;
+        padding: 0.5rem;
+        color: white;
+        border-radius: 5px;
+    }
+    button:hover{
+        cursor: pointer;
+        background-color: white !important;
+        color: red;
+        transform: scale(1.1);
+    }
+    .heart{
+        color: #980000;
+    }
+    .pearl{
+        border: 1px solid black;
+    }
+    .heart:hover{
+        cursor: pointer;
+        transform: scale(1.2);
+    }
+    .box:hover{
+        cursor: pointer;
+        transform: scale(0.98);
+    }
+    ::-webkit-scrollbar{
+        width: 10px;
+    }
+    *::-webkit-scrollbar-thumb {
+        background-color: #980000;
+        border-radius: 10px;
+        border: 1px solid #ffffff;
+    }
+    .pearls-end{
+        display: none;
+    }
+</style>
+</html>

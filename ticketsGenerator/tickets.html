@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketsgenerator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body class="bg-info">
+    <main class=" m-auto text-center p-3" style="height: 100vh; max-width: 500px;">
+        <div style="height: 120px;">
+            <h1 class="text-white">Tickets Generator</h1>
+            <button class="btn btn-primary" id="btn-generator">Generate</button>
+        </div>
+        <div id="tickets" class="border p-2 w-100" style="height: calc(100% - 120px); overflow: auto;">
+        </div>
+    </main>
+    <script type="text/javascript">
+        // localStorage.clear()
+        console.log(localStorage)
+        let tickets = ['Cena offerta', 'Coccole X2', 'Coccole X5', 'Coccole X10', 'Passaggio offerto']
+        let btn_generate = document.querySelector('#btn-generator')
+        let ticket_list = document.querySelector('#tickets')
+        let chronology = localStorage.getItem('tickets') ? JSON.parse(localStorage.getItem('tickets')) : []
+        let date_now = new Date()
+        let next_date = parseInt(localStorage.getItem('dateNextTick'))
+
+        if (chronology.length > 0){
+            chronology.forEach((data, index) => {
+                create_html_ticket(ticket_list, data.date, data.description, index)
+            })
+        }
+
+        btn_generate.addEventListener('click', ()=>{
+            if(date_now.getDate() == next_date || !next_date){
+                let ticket_random = tickets[Math.floor(Math.random() * tickets.length)]
+                let date = generate_date()
+
+                create_html_ticket(ticket_list, date, ticket_random, chronology.length)
+
+                chronology.push({description: ticket_random, date: date})
+                localStorage.setItem('tickets', JSON.stringify(chronology))
+                next_date = new Date()
+                localStorage.setItem('dateNextTick', next_date.getDate() + 7)
+            }else{
+                alert('You can generate a new ticket on the '+ localStorage.getItem('dateNextTick')+'rd of the month')
+            }
+        })
+
+        document.addEventListener('DOMContentLoaded', ()=>{
+            document.querySelectorAll('.btn-checks').forEach(btn =>{
+                btn.addEventListener('click', function(){
+                    if(confirm('Are you sure you want to use this ticket?')){
+                        this.parentElement.remove()
+                        chronology.splice(this.parentElement.dataset.id, 1)
+                        localStorage.setItem('tickets', JSON.stringify(chronology))
+                    }
+                })
+            })
+        })
+
+        //FUNCTIONS
+        function generate_date() {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let date = new Date()
+            return date.getDate() + ' ' + months[date.getMonth()]
+        }
+
+        function create_html_ticket(ticket_list, date, ticket_random, id){
+            let ticket = document.createElement('div')
+            ticket.innerHTML = `<div id="ticket" class="border d-inline-block d-flex justify-content-between align-items-center w-100 rounded-3 overflow-hidden mb-2" data-id="${id}">
+                <div id="ticket-titles">
+                    <div id="ticker-date" class="bg-white p-3 d-inline-block" style="width: 130px;">${date}</div>
+                    <span id="ticket-description" class="text-white">${ticket_random}</span>
+                </div>
+                <button title="Use ticket n.${id}" class="btn-checks text-white bg-success border-0 p-3">&#10003;</button>
+            </div>`
+            ticket_list.append(ticket)
+        }
+    </script>
+</body>
+</html>

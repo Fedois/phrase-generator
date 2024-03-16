@@ -1,3 +1,3 @@
-GENERATORE DI FRASI
+GENERATORE DI FRASI E TICKETS
 
-Sviluppo di un Generatore di frasi romantiche con HTML, CSS e JavaScript sfruttando localStorage() per la generazione di una frase quotidiana.
+Sviluppo di un Generatore di frasi e tickets con HTML, CSS e JavaScript sfruttando localStorage().
