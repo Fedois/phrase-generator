@@ -41,7 +41,8 @@
                 chronology.push({description: ticket_random, date: date})
                 localStorage.setItem('tickets', JSON.stringify(chronology))
                 next_date = new Date()
-                localStorage.setItem('dateNextTick', next_date.getDate() + 7)
+                next_date.setDate(new Date().getDate() + 7)
+                localStorage.setItem('dateNextTick', next_date.getDate())
             }else{
                 alert('You can generate a new ticket on the '+ localStorage.getItem('dateNextTick')+'rd of the month')
             }
