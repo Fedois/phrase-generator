@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthorDare</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-danger">
+    <main class="text-center position-relative">
+        <h1 style="font-size: 5em; display: inline;">&hearts; Truth or Dare hot &hearts;</h1>
+
+        <div>
+            <p style="padding: 2rem; font-size: 2em;" id="phrase" class="border d-inline-block my-5">
+                <q> </q>
+            </p>
+        </div>
+
+        <button onclick="generatePhrase('truth')" id="btn-truth" class="border bg-danger border-black me-5" style="font-size: 1.5em;">Truth</button>
+        <button onclick="generatePhrase('dare')" id="btn-dare" class="border bg-danger border-black" style="font-size: 1.5em;">Dare</button>
+    </main>
+</body>
+
+<script type="text/javascript">
+    const arrayTruth = [
+    "Luci accese o luci spente?",
+    "Duro e veloce o lento e sensuale?",
+    "Dominante o sottomesso?",
+    "Sesso mattutino o sesso serale?",
+    "Qual è la tua posizione sessuale preferita?",
+    "Quale posizione sessuale non hai mai provato e ti incuriosisce?",
+    "C'è qualcosa di inaspettato che ti eccita?",
+    "Cosa ti piace di più: il sesso orale o la penetrazione?",
+    "Preferiresti fare sesso normale tutti i giorni o fare sesso straordinario una volta al mese?",
+    "Preferiresti stare con qualcuno che non ha esperienza sessuale o che ne ha tantissima?",
+    "Se potessi rimorchiare una qualsiasi celebrità al mondo, chi sceglieresti?",
+    "Con quale frequenza ti masturbi?",
+    "A cosa fantastichi quando ti masturbi?",
+    "Ti piace il porno?",
+    "Ti piacerebbe guardare un porno con me?",
+    "Qual è stata la tua esperienza sessuale più hot (prima di incontrarmi)?",
+    "Faresti mai sesso in un luogo pubblico?",
+    "Ti piace l'idea di essere legato (o di legarmi)?",
+    "Qual è la tua parte preferita del mio corpo?",
+    "Quale parte del tuo corpo vuoi che tocchi di più?",
+    "Come ti piace essere baciato?",
+    "Hai delle perversioni, dei feticismi o dei piaceri proibiti?",
+    "Qual è la tua fantasia sessuale più sporca?",
+    "Qual è il ricordo più bello che hai di noi?",
+    "C'è una cosa che vorresti che ti facessi a letto?",
+    "Sei una brava ragazza o un cattivo ragazzo/ragazza?",
+    "Sei bravo a flirtare?",
+    "Qual è una delle tue 'mosse' preferite?",
+    "Come hai scoperto la masturbazione?",
+    "Quale linguaggio d'amore ti piace ricevere?",
+    "Quale linguaggio d'amore ti piace dare?",
+    "Qual è una delle cose che più ti eccitano?",
+    "Qual è il posto più selvaggio in cui hai fatto sesso?",
+    "Come definiresti il buon sesso?",
+    "Qual è la tua fantasia più sporca?",
+    "Quale ritieni sia la parte più sexy del corpo di un uomo/donna/persona?",
+    "Preferisci fare la prima mossa?",
+    "Quando hai fatto sesso per la prima volta? Com'è andato?",
+    "Cosa c'è nella tua lista dei desideri sessuali?",
+    "Cosa significa per te la chimica sessuale?",
+    "Qual è la cosa più perversa che hai mai fatto a letto?",
+    "Ti consideri una persona particolarmente sessuale?",
+    "Tette o sedere?",
+    "Ti piace l'anale?",
+    "Hai mai avuto una relazione con qualcuno di un altro sesso?",
+    "Quale caratteristica o parte del corpo ti fa più spesso i complimenti?",
+    "Qual è il tuo modo preferito per essere toccato?",
+    "Quale parte del mio corpo vorresti esplorare di più?",
+    "Se potessi rivivere una delle nostre esperienze sessuali, quale sceglieresti?",
+    "Cosa pensi che significhi essere bravi a letto?",
+    "Qual è la posizione sessuale che ti fa raggiungere l'orgasmo con maggiore probabilità?",
+    "Quale sarebbe un posto davvero hot dove fare sesso?",
+    "Qual è una cosa del tutto ordinaria che ti eccita davvero?",
+    "Qual è la tua routine di masturbazione preferita?",
+    "Cosa penseresti se la gente ci guardasse fare sesso?",
+    "Cosa ti piacerebbe vedermi indossare in un'occasione speciale a sfondo sessuale?",
+    "Qual è il tuo tipo preferito di preliminare?",
+    "Ti piace essere sculacciato? (O l'idea di sculacciarmi?)",
+    "Cosa pensi del BDSM?",
+    "Cosa ne pensi dei giocattoli sessuali?",
+    "Se potessi mantenere una sola posizione sessuale per il resto della tua vita, quale sarebbe?",
+    "Qual è il posto più scomodo in cui ti sei mai eccitato?",
+    "Se potessi esprimere tre desideri sexy, quali sarebbero?",
+    "Qual è la cosa più cattiva che hai mai fatto?",
+    "Qual è il sogno erotico più scandaloso che tu abbia mai fatto?",
+    "Su una scala da uno al monte Everest, quanto è alto il tuo desiderio sessuale?",
+    "Se potessi creare un sex toy e dargli un nome, quale sarebbe?"
+    ];
+    const arrayDare = [
+    "Ti sfido a togliermi i vestiti usando solo la bocca.",
+    "Ti sfido a fare una danza del ventre.",
+    "Ti sfido a farmi un lap dance.",
+    "Ti sfido a passare l'aspirapolvere sul tappeto nudo.",
+    "Ti sfido a prepararmi un cocktail nudo.",
+    "Ti sfido a leccarmi lo sciroppo di cioccolato.",
+    "Ti sfido a mandarmi una foto di nudo.",
+    "Ti sfido a leggermi delle oscenità ad alta voce.",
+    "Ti sfido a mandare un messaggio sexy a una persona a caso.",
+    "Ti sfido a fare il bagno nudo.",
+    "Ti sfido a provarci con me come se ci stessimo incontrando per la prima volta.",
+    "Ti sfido a legarmi.",
+    "Ti sfido a lasciarti legare.",
+    "Ti sfido a farmi un massaggio.",
+    "Ti sfido a lasciarti vestire con un abito sexy.",
+    "Ti sfido a indossare la tua lingerie più sexy.",
+    "Ti sfido a fare una lotta con i cuscini con me, in mutande.",
+    "Ti sfido a trovare la moneta nella mia tasca.",
+    "Ti sfido a mostrarmi l'ultimo porno che hai guardato.",
+    "Ti sfido a fingere un orgasmo.",
+    "Ti sfido a fingere di fare un pompino a questa banana.",
+    "Ti sfido a baciare appassionatamente quel cuscino.",
+    "Ti sfido a riprodurre la tua posizione sessuale preferita con effetti sonori.",
+    "Ti sfido a spararmi un colpo al corpo.",
+    "Ti sfido a lasciarmi spararti un colpo al corpo.",
+    "Ti sfido a spalmarmi dell'olio da massaggio sul sedere.",
+    "Ti sfido a fare una pole dance all'aperto, su un lampione.",
+    "Ti sfido a twerkare.",
+    "Ti sfido a farmi un massaggio ai piedi.",
+    "Ti sfido a radermi i peli pubici.",
+    "Ti sfido a radermi il petto.",
+    "Ti sfido a farti guidare in giro per casa bendato.",
+    "Ti sfido a guidarmi in giro per casa mentre indosso una benda.",
+    "Ti sfido a fingere di lavorare in una linea telefonica per sesso.",
+    "Ti sfido a fingere di realizzare una clip OnlyFans.",
+    "Ti sfido a mostrarmi cosa vuoi farmi usando solo emoji.",
+    "Ti sfido a fare la tua faccia da orgasmo per 30 secondi.",
+    "Ti sfido a mostrarmi come indossare un preservativo.",
+    "Ti sfido a mandarmi un messaggio vocale sexy dall'altra stanza.",
+    "Ti sfido a mettere un cubetto di ghiaccio nelle tue mutande per 30 secondi.",
+    "Ti sfido a usare la pittura a dita e il mio corpo come tela.",
+    "Ti sfido a dirmi la cosa più oscena che ti viene in mente.",
+    "Ti sfido a baciarmi con passione come se la tua vita dipendesse da questo.",
+    "Ti sfido a giocare il resto del gioco nudo.",
+    "Ti sfido a spogliarti fino alla biancheria intima.",
+    "Ti sfido a recitare una scena di sesso iconica tratta da un film.",
+    "Ti sfido a raccontarmi la tua storia di sesso più sfrenata.",
+    "Ti sfido a farmi leccare la panna montata da te.",
+    "Ti sfido a farmi un massaggio con la cera calda.",
+    "Ti sfido a farti fare un massaggio con la cera calda.",
+    "Ti sfido a indossare mutandine vibranti.",
+    "Ti sfido a provare a rimorchiarmi con una frase da rimorchio.",
+    "Ti sfido a fare la doccia con me.",
+    "Ti sfido a fare un servizio fotografico di nudo con me come fotografo.",
+    "Ti sfido a chiamare una linea telefonica per sesso.",
+    "Ti sfido a mangiare la frutta in modo sensuale.",
+    "Ti sfido a farmi un pompino.",
+    "Ti sfido a farti fare un pompino.",
+    "Ti sfido a toccarti davanti a me.",
+    "Ti sfido a darmi una sculacciata.",
+    "Ti sfido a usare un giocattolo sessuale su di me.",
+    "Ti sfido a lasciarmi usare un giocattolo sessuale su di te.",
+    "Ti sfido a usare le pinze per capezzoli.",
+    "Ti sfido a cantarmi una ballata sexy.",
+    "Ti sfido a provare a fare un gioco di ruolo con me.",
+    "Ti sfido a ordinare online qualcosa di sexy da provare insieme (ad esempio, un olio per massaggi o un nuovo giocattolo)."
+    ];
+
+    function generatePhrase(type){
+        let phrase = ''
+        if(type === 'truth')
+            phrase = getPhrase(arrayTruth)
+        else if(type === 'dare')
+            phrase = getPhrase(arrayDare)
+        document.querySelector('q').innerHTML = phrase
+    }
+
+    const getPhrase = (array) =>{
+        randomPhrase = Math.floor(Math.random() * array.length)
+        return array[randomPhrase]
+    }
+</script>
