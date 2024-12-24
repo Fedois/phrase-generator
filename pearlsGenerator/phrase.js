@@ -733,3 +733,13 @@ let pearls = [
   "Il tuo amore è la mia ispirazione.",
   "Non riesco a smettere di pensarti.",
 ];
+
+const theme_colors = {
+  'black': ['#181818', 'white'],
+  'white': ['white', 'black'],
+  'red': ['red', 'white'],
+  'blue': ['#0066ff', 'white'],
+  'violet': ['#b600b6', 'white'],
+  'pink': ['pink', 'black'],
+  'yellow': ['#fefe9f', 'black']
+}

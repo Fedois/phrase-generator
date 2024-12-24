@@ -33,7 +33,7 @@
         <p style="font-size: 2em; display: none;" class="info">tomorrow you will be able to generate a new peark</p>
 
         <div class="birthday position-absolute top-0 start-0 d-flex justify-content-center align-items-center">
-            <div class="fs-2 border bg-white text-dark">
+            <div class="fs-2 border bg-white text-dark" style="display: none;">
                 Happy Birthday to You, 
                 Happy Birthday to You, 
                 Happy Birthday Dear Elisa, 
@@ -183,61 +183,55 @@
             
             // CAMBIA TEMA
             document.querySelector('.heart').addEventListener('click', function() {
-                color = setDarkMode(color)
+                color = changeTheme(color)
             })
 
-            if (localStorage.getItem('dark-mode') === "black"){
-                changeTheme('#181818', 'white')
-            } else if(localStorage.getItem('dark-mode') === "white"){
-                changeTheme('white', 'black')
-            } else if (localStorage.getItem('dark-mode') === "red"){
-                changeTheme('red', 'white')
-            } else if (localStorage.getItem('dark-mode') === "blue"){
-                changeTheme('#0066ff', 'white')
-            } else if (localStorage.getItem('dark-mode') === "violet"){
-                changeTheme('#b600b6', 'white')
-            } else if (localStorage.getItem('dark-mode') === "pink"){
-                changeTheme('pink', 'black')
-            }  else if (localStorage.getItem('dark-mode') === "yellow"){
-                changeTheme('#fefe9f', 'black')
-            }
+            setTheme(theme_colors[localStorage['dark-mode']])
         });
 
 
         // FUNZIONI
-        function setDarkMode(color){
-            if (color === "white"){
-                color = "black"
-                changeTheme('#181818', 'white')
-            } else if (color === "black"){
-                color = "red"
-                changeTheme('red', 'white')
-            } else if (color === "red") {
-                color = "blue"
-                changeTheme('#0066ff', 'white')
-            } else if (color === "blue") {
-                color = "violet"
-                changeTheme('#b600b6', 'black')
-            } else if (color === "violet") {
-                color = "pink"
-                changeTheme('pink', 'black')
-            } else if (color === "pink") {
-                color = "yellow"
-                changeTheme('#fefe9f', 'black')
-            } else if (color === "yellow") {
-                color = "white"
-                changeTheme('white', 'black')
+        function changeTheme(color){
+            let next_color = color;
+
+            switch (color) {
+                case 'white':
+                    next_color = 'black'
+                    break;
+                case 'black':
+                    next_color = 'red'
+                    break;
+                case 'red':
+                    next_color = 'blue'
+                    break;
+                case 'blue':
+                    next_color = 'violet'
+                    break;
+                case 'violet':
+                    next_color = 'pink'
+                    break;
+                case 'pink':
+                    next_color = 'yellow'
+                    break;
+                case 'yellow':
+                    next_color = 'white'
+                    break;
             }
-            localStorage.setItem('dark-mode', color)
-            return color
+            
+            setTheme(theme_colors[next_color])
+            localStorage.setItem('dark-mode', next_color)
+            return next_color
         } 
 
-        function changeTheme(color1, color2){
+        function setTheme(colors){
+            if(colors == null) return
+            const color1 = colors[0]
+            const color2 = colors[1]
             document.querySelector('main').style.backgroundColor = color1
             document.querySelector('main').style.color = color2
             document.querySelector('.modal').style.color = color2
             document.querySelector('.modal-content').style.backgroundColor = color1
-            document.querySelector('.pearl').style.border = `1px solid ${color2} ` 
+            document.querySelector('.pearl').style.border = `1px solid ${color2}` 
         }
     </script>
 </body>
