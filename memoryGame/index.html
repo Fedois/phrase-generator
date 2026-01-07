@@ -7,15 +7,12 @@
     <title>memoryGame</title>
 </head>
 <body>
-    <div class="play">
-        <button onclick="playGame()">play/shuffle</button>
-        <p id="player1"></p>
-        <p id="player2"></p>
+    <div class="play" style="display: flex;">
+        <button onclick="playGame()">play/shuffle</button> &nbsp;&nbsp;
+        <p id="player1" style="color: red;"></p> &nbsp; | &nbsp;
+        <p id="player2" style="color: blue;"></p>
     </div>
-
-    <div>
-        <ul class="cards"></ul>
-    </div>
+    <ul class="cards"></ul>
 
     <script type="text/javascript">
         let {cardOne, cardTwo, pointPlayerA, pointPlayerB, playerTurn, disableCheck} = defaultData()
