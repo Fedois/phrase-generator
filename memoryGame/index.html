@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>memoryGame</title>
+</head>
+<body>
+    <div class="play">
+        <button onclick="playGame()">play/shuffle</button>
+        <p id="player1"></p>
+        <p id="player2"></p>
+    </div>
+
+    <div>
+        <ul class="cards"></ul>
+    </div>
+
+    <script type="text/javascript">
+        let {cardOne, cardTwo, pointPlayerA, pointPlayerB, playerTurn, disableCheck} = defaultData()
+        playGame()
+
+        function playGame(){
+            defaultData()
+            displayPoint()
+            setPlayerTurn()
+
+            const arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19].flatMap(i => [i,i])
+            arr.sort(() => Math.random() > 0.5 ? 1 : -1);
+
+            for (const index in arr) {
+                document.querySelector('.cards').innerHTML += `
+                <li class="card" onClick="flipCard(this)" id="card-${arr[index]}">
+                    <div class="view front-view">
+                        <img src="https://cdn.jsdelivr.net/gh/Sop20Games/memory-card@main/images/que_icon.svg" alt="icon">
+                    </div>
+                    <div class="view back-view">
+                        <img src="images/memory${arr[index]}.jpg" alt="card-img">
+                    </div>
+                </li>
+                `
+            }
+        }
+
+        function flipCard(clickedCard){
+            if(clickedCard.classList.contains('flip') || disableCheck) return
+
+            clickedCard.classList.add('flip')
+            if(!cardOne) return cardOne = clickedCard
+
+            cardTwo = clickedCard
+            disableCheck = true
+
+            if(cardOne.id === cardTwo.id){
+                if(playerTurn) pointPlayerA++
+                else pointPlayerB++
+                displayPoint()
+                cardOne = cardTwo = null
+                disableCheck = false
+            } else {
+                setTimeout(() => {
+                    cardOne.classList.add("shake");
+                    cardTwo.classList.add("shake");
+                }, 400);
+                setTimeout(() => {
+                    cardOne.classList.remove('shake', 'flip')
+                    cardTwo.classList.remove('shake', 'flip')
+                    setPlayerTurn()
+                    cardOne = cardTwo = null
+                    disableCheck = false
+                }, 1000);
+            }
+        }
+
+        function displayPoint(){
+            document.getElementById('player1').innerHTML = 'player A: '+pointPlayerA
+            document.getElementById('player2').innerHTML = 'player B: '+pointPlayerB
+        }
+
+        function setPlayerTurn(){
+            playerTurn = !playerTurn
+            document.body.className = playerTurn ? 'playerA' : 'playerB'
+        }
+
+        function defaultData(){
+            document.querySelector('.cards').innerHTML = ''
+            let cardOne = null
+            let cardTwo = null
+            let pointPlayerA = 0
+            let pointPlayerB = 0
+            let disableCheck = false
+            let playerTurn = Math.random() > 0.5 // true if playerA, false if playerB
+
+            return {cardOne, cardTwo, pointPlayerA, pointPlayerB, playerTurn, disableCheck}
+        }
+    </script>
+</body>
+</html>
