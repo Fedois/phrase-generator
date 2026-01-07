@@ -15,7 +15,7 @@
     <ul class="cards"></ul>
 
     <script type="text/javascript">
-        let {cardOne, cardTwo, pointPlayerA, pointPlayerB, playerTurn, disableCheck} = defaultData()
+        let cardOne, cardTwo, pointPlayerA, pointPlayerB, playerTurn, disableClick;
         playGame()
 
         function playGame(){
@@ -23,7 +23,8 @@
             displayPoint()
             setPlayerTurn()
 
-            const arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19].flatMap(i => [i,i])
+            const arr = Array.from({length: 19}, (_, i) => i + 1).flatMap(i => [i,i])
+            console.log(arr)
             arr.sort(() => Math.random() > 0.5 ? 1 : -1);
 
             for (const index in arr) {
@@ -41,20 +42,20 @@
         }
 
         function flipCard(clickedCard){
-            if(clickedCard.classList.contains('flip') || disableCheck) return
+            if(clickedCard.classList.contains('flip') || disableClick) return
 
             clickedCard.classList.add('flip')
             if(!cardOne) return cardOne = clickedCard
 
             cardTwo = clickedCard
-            disableCheck = true
+            disableClick = true
 
             if(cardOne.id === cardTwo.id){
                 if(playerTurn) pointPlayerA++
                 else pointPlayerB++
                 displayPoint()
                 cardOne = cardTwo = null
-                disableCheck = false
+                disableClick = false
             } else {
                 setTimeout(() => {
                     cardOne.classList.add("shake");
@@ -65,7 +66,7 @@
                     cardTwo.classList.remove('shake', 'flip')
                     setPlayerTurn()
                     cardOne = cardTwo = null
-                    disableCheck = false
+                    disableClick = false
                 }, 1000);
             }
         }
@@ -82,14 +83,19 @@
 
         function defaultData(){
             document.querySelector('.cards').innerHTML = ''
-            let cardOne = null
-            let cardTwo = null
-            let pointPlayerA = 0
-            let pointPlayerB = 0
-            let disableCheck = false
-            let playerTurn = Math.random() > 0.5 // true if playerA, false if playerB
+            cardOne = null
+            cardTwo = null
+            pointPlayerA = 0
+            pointPlayerB = 0
+            disableClick = false
+            playerTurn = Math.random() > 0.5 // true is playerA and false is playerB
+        }
 
-            return {cardOne, cardTwo, pointPlayerA, pointPlayerB, playerTurn, disableCheck}
+        //for debug
+        function FlipAll(){
+            document.querySelectorAll('.card').forEach(element => {
+                element.classList.add('flip')
+            })
         }
     </script>
 </body>
