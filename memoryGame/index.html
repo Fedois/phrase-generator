@@ -42,16 +42,19 @@
 
         function flipCard(clickedCard){
             if(clickedCard.classList.contains('flip') || disableClick) return
-
-            clickedCard.classList.add('flip')
             if(!firstCard) return firstCard = clickedCard
 
+            clickedCard.classList.add('flip')
             disableClick = true
             if(firstCard.id === clickedCard.id){
                 playerTurn ? pointPlayerA++ : pointPlayerB++
-                displayPoint()
-                firstCard = null
-                disableClick = false
+                displayPoint();
+                setTimeout(() => {
+                    firstCard.classList.add("scale");
+                    clickedCard.classList.add("scale");
+                    firstCard = null
+                    disableClick = false
+                }, 400);
             } else {
                 setTimeout(() => {
                     firstCard.classList.add("shake");

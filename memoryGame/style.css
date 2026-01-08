@@ -35,6 +35,9 @@ body{
 .card.shake{
   animation: shake 0.35s ease-in-out;
 }
+.card.scale {
+  animation: scale 0.40s ease-in-out;
+}
 @keyframes shake {
   0%, 100%{
     transform: translateX(0);
@@ -50,6 +53,14 @@ body{
   }
   80%{
     transform: translateX(8px);
+  }
+}
+@keyframes scale {
+  0%, 100% {
+    transform: scale(1.0);
+  }
+  50% {
+      transform: scale(1.05);
   }
 }
 .card .view{
