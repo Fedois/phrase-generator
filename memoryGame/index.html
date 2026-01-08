@@ -29,10 +29,10 @@
             for (const id in memoryIds) {
                 document.querySelector('.cards').innerHTML += `
                 <li class="card" onClick="flipCard(this)" id="card-${memoryIds[id]}">
-                    <div class="view front-view">
-                        <img src="https://cdn.jsdelivr.net/gh/Sop20Games/memory-card@main/images/que_icon.svg" alt="icon">
-                    </div>
                     <div class="view back-view">
+                        <img src="images/back_image_memory.png" alt="icon">
+                    </div>
+                    <div class="view front-view">
                         <img src="images/memory${memoryIds[id]}.jpg" alt="card-img">
                     </div>
                 </li>
@@ -74,7 +74,7 @@
 
         function setPlayerTurn(){
             playerTurn = !playerTurn
-            document.body.className = playerTurn ? 'playerA' : 'playerB'
+            document.body.style.background = playerTurn ? 'red' : 'blue'
         }
 
         function setDefaultData(){
