@@ -15,25 +15,25 @@
     <ul class="cards"></ul>
 
     <script type="text/javascript">
-        let cardOne, cardTwo, pointPlayerA, pointPlayerB, playerTurn, disableClick;
+        let firstCard, pointPlayerA, pointPlayerB, playerTurn, disableClick;
         playGame()
 
         function playGame(){
-            defaultData()
+            setDefaultData()
             displayPoint()
             setPlayerTurn()
 
-            const arr = Array.from({length: 19}, (_, i) => i + 1).flatMap(i => [i,i])
-            arr.sort(() => Math.random() > 0.5 ? 1 : -1);
+            const memoryIds = Array.from({length: 26}, (_, i) => i + 1).flatMap(i => [i,i])
+            memoryIds.sort(() => Math.random() > 0.5 ? 1 : -1);
 
-            for (const index in arr) {
+            for (const id in memoryIds) {
                 document.querySelector('.cards').innerHTML += `
-                <li class="card" onClick="flipCard(this)" id="card-${arr[index]}">
+                <li class="card" onClick="flipCard(this)" id="card-${memoryIds[id]}">
                     <div class="view front-view">
                         <img src="https://cdn.jsdelivr.net/gh/Sop20Games/memory-card@main/images/que_icon.svg" alt="icon">
                     </div>
                     <div class="view back-view">
-                        <img src="images/memory${arr[index]}.jpg" alt="card-img">
+                        <img src="images/memory${memoryIds[id]}.jpg" alt="card-img">
                     </div>
                 </li>
                 `
@@ -44,27 +44,24 @@
             if(clickedCard.classList.contains('flip') || disableClick) return
 
             clickedCard.classList.add('flip')
-            if(!cardOne) return cardOne = clickedCard
+            if(!firstCard) return firstCard = clickedCard
 
-            cardTwo = clickedCard
             disableClick = true
-
-            if(cardOne.id === cardTwo.id){
-                if(playerTurn) pointPlayerA++
-                else pointPlayerB++
+            if(firstCard.id === clickedCard.id){
+                playerTurn ? pointPlayerA++ : pointPlayerB++
                 displayPoint()
-                cardOne = cardTwo = null
+                firstCard = null
                 disableClick = false
             } else {
                 setTimeout(() => {
-                    cardOne.classList.add("shake");
-                    cardTwo.classList.add("shake");
+                    firstCard.classList.add("shake");
+                    clickedCard.classList.add("shake");
                 }, 400);
                 setTimeout(() => {
-                    cardOne.classList.remove('shake', 'flip')
-                    cardTwo.classList.remove('shake', 'flip')
+                    firstCard.classList.remove('shake', 'flip')
+                    clickedCard.classList.remove('shake', 'flip')
                     setPlayerTurn()
-                    cardOne = cardTwo = null
+                    firstCard = null
                     disableClick = false
                 }, 1000);
             }
@@ -80,18 +77,16 @@
             document.body.className = playerTurn ? 'playerA' : 'playerB'
         }
 
-        function defaultData(){
+        function setDefaultData(){
             document.querySelector('.cards').innerHTML = ''
-            cardOne = null
-            cardTwo = null
-            pointPlayerA = 0
-            pointPlayerB = 0
+            firstCard = null
+            pointPlayerA = pointPlayerB = 0
             disableClick = false
             playerTurn = Math.random() > 0.5 // true is playerA and false is playerB
         }
 
         //for debug
-        function FlipAll(){
+        function flipAll(){
             document.querySelectorAll('.card').forEach(element => {
                 element.classList.add('flip')
             })
