@@ -42,9 +42,10 @@
 
         function flipCard(clickedCard){
             if(clickedCard.classList.contains('flip') || disableClick) return
-            if(!firstCard) return firstCard = clickedCard
 
             clickedCard.classList.add('flip')
+            if(!firstCard) return firstCard = clickedCard
+
             disableClick = true
             if(firstCard.id === clickedCard.id){
                 playerTurn ? pointPlayerA++ : pointPlayerB++
